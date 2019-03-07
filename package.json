@@ -2,7 +2,7 @@
   "name": "learn-02",
   "version": "1.0.0",
   "description": "使用 superagent 与 cheerio 完成简单爬虫",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
