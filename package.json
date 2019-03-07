@@ -1,15 +1,16 @@
 {
-  "name": "learn-01",
+  "name": "learn-02",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "使用 superagent 与 cheerio 完成简单爬虫",
+  "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "cheerio": "^1.0.0-rc.2",
     "express": "^4.16.4",
-    "utility": "^1.15.0"
+    "superagent": "^4.1.0"
   }
 }
