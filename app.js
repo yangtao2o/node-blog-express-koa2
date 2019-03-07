@@ -3,7 +3,7 @@ const superagent = require('superagent')
 const cheerio = require('cheerio')
 
 const app = express()
-const PORT = 8000
+const PORT = process.env.PORT || 8000
 const URL = 'https://cnodejs.org'
 /**
  * 当在浏览器中访问 http://localhost:8000/ 时，输出 CNode(https://cnodejs.org/ ) 社区首页的所有帖子标题和链接，以 json 的形式。
