@@ -1,48 +1,33 @@
-const express = require('express')
-const superagent = require('superagent')
-const cheerio = require('cheerio')
+const handleBlogRouter = require('./src/router/blog')
+const handleUserRouter = require('./src/router/user')
 
-const app = express()
-const PORT = process.env.PORT || 8000
-const URL = 'https://cnodejs.org'
-/**
- * 当在浏览器中访问 http://localhost:8000/ 时，输出 CNode(https://cnodejs.org/ ) 社区首页的所有帖子标题和链接，以 json 的形式。
- */
-app.get('/', (req, res, next) => {
-  // 使用 superagent 获取 url
-  superagent.get(URL, (err, sres) => {
-    if(err) {
-      return next(err)
-    }
-    const $ = cheerio.load(sres.text)
-    const items = []
-    const $target = $('#topic_list .topic_title')
-    let itemsHtml = ''  
+const serverHandle = (req, res) => {
+  req.path = req.url.split('?')[0]
+  // 设置返回格式为JSON
+  res.setHeader('Content-type', 'application/json')
 
-    $target.each((i, item) => {
-      let $this = $(item)
-      items.push({
-        title: $this.attr('title'),
-        url: URL + $this.attr('href')
-      })
-    })
+  // 登录路由
+  const userData = handleUserRouter(req, res)
+  if(userData) {
+    res.end(
+      JSON.stringify(userData)
+    )
+    return
+  }
 
-    console.log('items--->', items)  // 以 JSON 格式打印
+  // 处理博客路由
+  const blogData = handleBlogRouter(req, res)
+  if(blogData) {
+    res.end(
+      JSON.stringify(blogData)
+    )
+    return
+  }
 
-    if(items) {
-      $(items).each((i, item) => {
-        itemsHtml += `<li><a href="${item.url}" title="${item.title}">${item.title}</a></li>`
-      })
-        itemsHtml = `<ol id="listItem">${itemsHtml}</ol>`
-    } else {
-      itemsHtml = `<p>暂时还获取不到数据...</p>`
-    }
+  // 未命中路由
+  res.writeHead(404, {'Content-type': 'text/plain'})
+  res.write('404 Not Found!\n')
+  res.end()
+}
 
-    res.send(itemsHtml)
-  })
-  
-})
-
-app.listen(PORT, (req, res) => {
-  console.log('App is listening at port ' + PORT)
-})
+module.exports = serverHandle

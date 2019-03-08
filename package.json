@@ -1,16 +1,16 @@
 {
-  "name": "learn-02",
+  "name": "blog",
   "version": "1.0.0",
-  "description": "使用 superagent 与 cheerio 完成简单爬虫",
-  "main": "app.js",
+  "description": "",
+  "main": "bin/www.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "cross-env NODE_ENV=dev nodemon ./bin/www.js"
   },
   "author": "",
   "license": "ISC",
-  "dependencies": {
-    "cheerio": "^1.0.0-rc.2",
-    "express": "^4.16.4",
-    "superagent": "^4.1.0"
+  "devDependencies": {
+    "cross-env": "^5.2.0",
+    "nodemon": "^1.18.10"
   }
 }
