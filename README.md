@@ -1,3 +1,12 @@
+## Tools
+* [Postman](https://www.getpostman.com/)
+* [Mysql Workbench](https://dev.mysql.com/downloads/workbench/)
+
+## Blog Process
+
+* [开发路由](./doc/router.md)
+* [数据库 MySQL](./doc/mysql.md)
+
 ## 学习资料
 * [Node.js 入门](https://cnodejs.org/getstart)
 * [react全家桶+express实战个人博客系列教程](https://www.jianshu.com/p/406f6df0f916)
@@ -11,9 +20,3 @@
 * [node-express-mongodb](../../../node-express-mongodb)
 * [node-express-spider](../../../node-express-spider)
 
-## Tools
-* [Postman](https://www.getpostman.com/)
-
-## Blog Process
-
-* [开发路由](./doc/router.md)
