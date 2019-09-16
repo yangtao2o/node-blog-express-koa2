@@ -1,13 +1,29 @@
-## Tools
-* [Postman](https://www.getpostman.com/)
-* [Mysql Workbench](https://dev.mysql.com/downloads/workbench/)
+# Node-Blog
+
+## Start
+
+```bash
+npm i 
+npm run dev
+```
+
+Url: http://localhost:8000/
 
 ## Blog Process
 
 * [开发路由](./doc/router.md)
 * [数据库 MySQL](./doc/mysql.md)
+* [登录](./doc/signin.md)
+* [日志](./doc/log.md)
+* [安全](./doc/safety.md)
+
+## Tools
+
+* [Postman](https://www.getpostman.com/)
+* [Mysql Workbench](https://dev.mysql.com/downloads/workbench/)
 
 ## 学习资料
+
 * [Node.js 入门](https://cnodejs.org/getstart)
 * [react全家桶+express实战个人博客系列教程](https://www.jianshu.com/p/406f6df0f916)
 * [详解如何从零开始搭建Express+Vue开发环境](https://www.jianshu.com/p/c65ecdcffed1)
@@ -16,6 +32,7 @@
 * [基于Vue+express的博客项目](https://www.jianshu.com/p/92fa50ea0b84)
 
 ## Node 相关
+
 * [node-blog-express-koa2](../../../node-blog-express-koa2)
 * [node-express-mongodb](../../../node-express-mongodb)
 * [node-express-spider](../../../node-express-spider)

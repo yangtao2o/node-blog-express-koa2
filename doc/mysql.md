@@ -109,7 +109,8 @@ module.exports = {
 
 #### API 对接
 
-##### app.js 文件：
+##### app.js
+
 ```js
 // post data
 getPostData(req).then(postData => {
@@ -145,7 +146,9 @@ getPostData(req).then(postData => {
 })
 ```
 
-##### router 文件下的 blog.js 文件：
+##### Router
+
+* router 文件下的 blog.js
 
 ```js
 const { getList, getDetail, newBlog, updateBlog, delBlog } = require('../controller/blog')
@@ -214,7 +217,7 @@ const handleBlogRouter = (req, res) => {
 module.exports = handleBlogRouter
 ```
 
-##### router 文件下的 user.js 文件：
+* router 文件下的 user.js
 
 ```js
 const { loginCheck } = require('../controller/user')
@@ -237,6 +240,9 @@ const handleUserRouter = (req, res) => {
 }
 module.exports = handleUserRouter
 ```
+
+##### Controller
+
 然后沿着 `require()` 找到 `controller/blog.js`，博客的增删改查：
 
 ```js
