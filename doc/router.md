@@ -4,6 +4,24 @@
 
 ### 路由初始化
 
+下载`cross-env`(Run scripts that set and use environment variables across platforms)和`nodemon`(restarting the node application when file changes in the directory are detected)：
+
+```json
+"devDependencies": {
+  "cross-env": "^5.2.0",
+  "nodemon": "^1.18.10"
+},
+```
+
+设置开发环境：
+
+```json
+"scripts": {
+  "test": "echo \"Error: no test specified\" && exit 1",
+  "dev": "cross-env NODE_ENV=dev nodemon ./bin/www.js"
+},
+```
+
 根据启动项目的访问顺序：
 
 * 根目录`bin/www.js`文件为启动项，定义如何创建 http 服务器
