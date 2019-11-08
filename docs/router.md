@@ -97,7 +97,6 @@ const handleBlogRouter = (req, res) => {
     const author = req.query.author || ''
     const keyword = req.query.keyword || ''
     const listData = getList(author, keyword)
-    console.log(new SuccessModel(listData))
     return new SuccessModel(listData)
   }
   // ...
@@ -301,7 +300,6 @@ const handleUserRouter = (req, res) => {
   if(method === 'POST' && req.path === '/api/blog/login') {
     const { username, password } = req.body
     const result = loginCheck(username, password)
-    console.log('user: ', username, password)
     if(result) {
       return new SuccessModel()
     }

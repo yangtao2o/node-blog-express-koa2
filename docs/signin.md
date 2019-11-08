@@ -93,3 +93,56 @@ res.setHeader(
   `username=${data.username}; path='/'; httpOnly; expire=${getCookieExpires()}`
 );
 ```
+
+### session
+
+cookie 的问题：会暴露 username，所以我们使用cookie存储userid，server端对应username，即server端存储用户信息。
+
+在 app.js 下：
+
+```js
+const SESSION_DATA = {}
+const serverHandle = (req, res) => {
+  // ...
+  // 解析 session
+  let needSetCookie = false
+  let userId = req.cookie.userid
+  if(userId) {
+    if(!SESSION_DATA[userId]) {
+      SESSION_DATA[userId] = {}
+    }
+  } else {
+    needSetCookie = true
+    userId = `${Date.now()}_${Math.random()}`
+    SESSION_DATA[userId] = {}
+  }
+  req.session = SESSION_DATA[userId]
+
+  // ... 
+
+  // 在需要设置cookie的地方设置
+  if(needSetCookie) {
+    res.setHeader('Set-Cookie', `userid=${userId}; path='/'; httpOnly; expire=${getCookieExpires()}`) 
+  }
+
+  // ...
+}
+```
+
+然后在 user.js 添加:
+
+```js
+// 获取username并赋值
+if(data.username) {
+  req.session.username = data.username
+  return new SuccessModel()
+}
+// 然后返回
+if(req.session.username) {
+  return Promise.resolve(
+    new SuccessModel({
+      session: req.session
+    })
+  )
+}
+```
