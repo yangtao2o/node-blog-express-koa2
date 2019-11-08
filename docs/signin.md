@@ -325,3 +325,51 @@ const handleUserRouter = (req, res) => {
 }
 module.exports = handleUserRouter
 ```
+
+### redis
+
+session的问题：session 是一个变量存在 nodejs 进程内存中
+
+- 进程内存有限，访问量过大，内存容易暴增
+- 线上多为多进程，进程间内存无法共享
+
+安装 redis:
+
+```bash
+brew install redis
+redis-server
+redis-cli
+
+~ ❯❯❯ redis-server
+...
+20160:M 08 Nov 2019 15:15:59.421 * Ready to accept connections
+
+~ ❯❯❯ redis-cli
+127.0.0.1:6379> set myname yangtao
+OK
+127.0.0.1:6379> get myname
+"yangtao"
+```
+
+测试：
+
+```js
+const redis = require('redis')
+
+// 创建客户端
+const redisClient = redis.createClient(6379, '127.0.0.1')
+
+redisClient.on('error', err => {
+  console.log(err)
+})
+
+// 测试
+redisClient.set('myname', 'yangtao', redis.print)
+
+redisClient.get('myname', (err, val) => {
+  if(err) return;
+  console.log(val)
+  redisClient.quit()
+});
+
+```
