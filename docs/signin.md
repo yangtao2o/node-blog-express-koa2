@@ -129,6 +129,134 @@ const serverHandle = (req, res) => {
 }
 ```
 
+app.js 具体内容为：
+
+```js
+const querystring = require('querystring')
+const handleBlogRouter = require('./src/router/blog')
+const handleUserRouter = require('./src/router/user')
+
+const SESSION_DATA = {}
+
+// 获取 cookie 过期时间
+const getCookieExpires = () => {
+  const d = new Date()
+  d.setTime(d.getTime() + (24 * 60 * 60 * 1000))
+  return d.toGMTString()
+}
+
+// 处理 post data
+const getPostData = (req) => {
+  const promise = new Promise((resolve, reject) => {
+    if(req.method !== 'POST') {
+      resolve({})
+      return
+    }
+    if(req.headers['content-type'] !== 'application/json') {
+      resolve({})
+      return
+    }
+
+    let postData = ''
+    req.on('data', chunk => {
+      postData += chunk.toString()
+    })
+    req.on('end', () => {
+      if(!postData) {
+        resolve({})
+        return
+      }
+      resolve(
+        JSON.parse(postData)
+      )
+    })
+  })
+  return promise
+}
+
+const serverHandle = (req, res) => {
+  // 设置返回格式为JSON
+  res.setHeader('Content-type', 'application/json')
+
+  // 获取 path
+  req.path = req.url.split('?')[0]
+
+  // 解析 query
+  req.query = querystring.parse(req.url.split('?')[1])
+
+  // 解析 cookie
+  req.cookie = {}
+  const cookieStr = req.headers.cookie || ''  // "k1=v1; k2=v2; k3=v3"
+  cookieStr.split(';').forEach(item => {
+    if(!item) {
+      return
+    }
+    const str = item.split('=')
+    const key = str[0].trim()
+    const val = str[1].trim()
+
+    req.cookie[key] = val
+  })
+
+  // 解析 session
+  let needSetCookie = false
+  let userId = req.cookie.userid
+  if(userId) {
+    if(!SESSION_DATA[userId]) {
+      SESSION_DATA[userId] = {}
+    }
+  } else {
+    needSetCookie = true
+    userId = `${Date.now()}_${Math.random()}`
+    SESSION_DATA[userId] = {}
+  }
+  req.session = SESSION_DATA[userId]
+
+
+  // post data
+  getPostData(req).then(postData => {
+    req.body = postData
+
+    // 登录路由
+    const userResult = handleUserRouter(req, res)
+    if(userResult) {
+      userResult.then(userData => {
+        // 操作 cookie
+        if(needSetCookie) {
+          res.setHeader('Set-Cookie', `userid=${userId}; path='/'; httpOnly; expire=${getCookieExpires()}`) 
+        }
+        res.end(
+          JSON.stringify(userData)
+        )
+      })
+      return
+    }
+
+    // 处理博客路由
+    const blogResult = handleBlogRouter(req, res)
+    if(blogResult) {
+      blogResult.then(blogData => {
+        // 操作 cookie
+        if(needSetCookie) {
+          res.setHeader('Set-Cookie', `userid=${userId}; path='/'; httpOnly; expire=${getCookieExpires()}`) 
+        }
+        res.end(
+          JSON.stringify(blogData)
+        )
+      })
+      return
+    }
+
+    // 未命中路由
+    res.writeHead(404, {'Content-type': 'text/plain'})
+    res.write('404 Not Found!\n')
+    res.end()
+  })
+}
+
+module.exports = serverHandle
+```
+
 然后在 user.js 添加:
 
 ```js
@@ -145,4 +273,55 @@ if(req.session.username) {
     })
   )
 }
+```
+
+user.js 全部内容为：
+
+```js
+const { login } = require('../controller/user')
+const { SuccessModel, ErrorModel } = require('../model/resModel')
+
+const handleUserRouter = (req, res) => {
+  const method = req.method
+  // 登录 POST
+  if(method === 'POST' && req.path === '/api/user/login') {
+    const { username, password } = req.body
+    const result = login(username, password)
+    return result.then(data => {
+      if(data.username) {
+        req.session.username = data.username
+        return new SuccessModel()
+      }
+      return new ErrorModel('登录失败')
+    })
+  }
+
+  // 登录 GET 测试
+  if(method === 'GET' && req.path === '/api/user/login') {
+    const { username, password } = req.query
+    const result = login(username, password)
+    return result.then(data => {
+      if(data.username) {
+        req.session.username = data.username
+        return new SuccessModel()
+      }
+      return new ErrorModel('登录失败')
+    })
+  }
+
+  // 登录 cookie 测试
+  if(method === 'GET' && req.path === '/api/user/logintest') {
+    if(req.session.username) {
+      return Promise.resolve(
+        new SuccessModel({
+          session: req.session
+        })
+      )
+    }
+    return Promise.resolve(
+      new ErrorModel('登录失败')
+    )
+  }
+}
+module.exports = handleUserRouter
 ```

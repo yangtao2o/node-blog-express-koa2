@@ -9,6 +9,7 @@ const handleUserRouter = (req, res) => {
     const result = login(username, password)
     return result.then(data => {
       if(data.username) {
+        req.session.username = data.username
         return new SuccessModel()
       }
       return new ErrorModel('登录失败')
@@ -22,7 +23,6 @@ const handleUserRouter = (req, res) => {
     return result.then(data => {
       if(data.username) {
         req.session.username = data.username
-        console.log(req.session)
         return new SuccessModel()
       }
       return new ErrorModel('登录失败')
