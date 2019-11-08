@@ -371,5 +371,110 @@ redisClient.get('myname', (err, val) => {
   console.log(val)
   redisClient.quit()
 });
-
 ```
+
+然后在 db 目录下新建 redis.js :
+
+```js
+const redis = require('redis')
+const { REDIS_CONF } = require('./../conf/db.js')
+
+// REDIS_CONF = {
+//   host: '127.0.0.1',
+//   port: '6379'
+// }
+
+const redisClient = redis.createClient(REDIS_CONF.port, REDIS_CONF.host)
+
+redisClient.on('error', err => {
+  console.log(err)
+})
+
+function set(key, value) {
+  if(typeof value === 'object') {
+    value = JSON.stringify(value)
+  }
+  redisClient.set(key, value, redis.print)
+}
+
+function get(key) {
+  return new Promise((resolve, reject) => {
+    redisClient.get(key, (err, value) => {
+      if(err) {
+        reject(err)
+        return
+      }
+      if(value == null) {
+        resolve(null)
+        return
+      }
+      try {
+        // 对应 if(typeof value === 'object') {...}
+        resolve(JSON.parse(value))
+      } catch(ex) {
+        resolve(value)
+      }
+    })
+  })
+}
+
+module.exports = {
+  set,
+  get
+}
+```
+
+接着更改 app.js 中的相关解析：
+
+```js
+const { set, get } = require('./src/db/redis')
+
+// 解析 session(redis)
+
+let needSetCookie = false 
+// 获取 cookie
+let userId = req.cookie.userid
+// 判断 cookie 中是否存在 userid
+if(!userId) {
+  // 需要设置 cookie，方便 res.setHeader('Set-Cookie', ...)
+  needSetCookie = true
+  // 初始化 redis 中 key
+  userId = `${Date.now()}_${Math.random()}`
+  // 初始化 value， 即 redis 中的 session 值
+  set(userId, {})
+}
+req.sessionId = userId
+// 获取 redis 中 sessionId 的 session 值
+get(req.sessionId).then(sessionData => {
+  if(sessionData == null) {
+    // 初始化 redis 中的 session 值
+    set(req.sessionId, {})
+    // 初始化 session 值
+    req.session = {}
+  } else {
+    // 设置 session 值
+    req.session = sessionData
+  }
+})
+```
+
+由上可最终返回 req.sessionId, req.session，对应 redis 里的 key 与 value。
+
+最后，在 router 下的 user.js 中同步 redis 的值：
+
+```js
+// update redis
+set(req.sessionId, req.session)
+```
+
+然后测试：
+
+```bash
+127.0.0.1:6379> keys *
+1) "myname"
+2) "1573187225426_0.4692044468197074"
+127.0.0.1:6379> get 1573187225426_0.4692044468197074
+"{\"username\":\"yangtao\"}"
+```
+
+Success!
