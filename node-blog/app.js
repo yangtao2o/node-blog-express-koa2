@@ -76,6 +76,7 @@ const serverHandle = (req, res) => {
   // 获取 session 值
   req.sessionId = userId
   get(req.sessionId).then(sessionData => {
+    console.log({sessionData})
     if(sessionData == null) {
       // 初始化 redis 中的 session 值
       set(req.sessionId, {})

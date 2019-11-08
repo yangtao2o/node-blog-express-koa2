@@ -480,7 +480,7 @@ if (method === "POST" && req.path === "/api/blog/new") {
   const loginCheckResult = loginCheck(req);
   // 未登录
   if (loginCheckResult) {
-    return loginCheck;
+    return loginCheckResult;
   }
   req.body.author = req.session.username;
   const result = newBlog(req.body);

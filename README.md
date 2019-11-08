@@ -14,6 +14,7 @@ Url: http://localhost:8000/
 * [开发路由](./docs/router.md)
 * [数据库 MySQL](./docs/mysql.md)
 * [登录](./docs/signin.md)
+* [nginx](./docs/nginx.md)
 * [日志](./docs/log.md)
 * [安全](./docs/safety.md)
 
