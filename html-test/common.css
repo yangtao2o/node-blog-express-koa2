@@ -1,0 +1,57 @@
+html {
+  font-size: 1.2rem;
+}
+
+@include media-breakpoint-up(sm) {
+  html {
+    font-size: 1.2rem;
+  }
+}
+
+@include media-breakpoint-up(md) {
+  html {
+    font-size: 1.4rem;
+  }
+}
+
+@include media-breakpoint-up(lg) {
+  html {
+    font-size: 1.6rem;
+  }
+}
+h1 {
+  margin: 2rem 0;
+}
+a:hover, a:focus {
+  text-decoration: none;
+}
+.blog-list {
+  margin-top: 2rem;
+}
+.blog-list li {
+  padding: 1rem 5px;
+}
+.blog-list li:not(:last-child) {
+  border-bottom: 1px solid #f1f1f1;
+}
+.title,
+.title a {
+  font-size: 1.3rem;
+  color: inherit;
+}
+.title a:hover {
+  color: #666;
+}
+.info-wrapper a {
+  color: inherit;
+}
+.info-wrapper a:hover {
+  color: #222;
+}
+.info-wrapper span {
+  color: #929292;
+  font-size: .8rem;
+}
+.info-wrapper span:last-child {
+  float: right;
+}

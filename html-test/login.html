@@ -1,53 +1,81 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>登录</title>
-</head>
-<body>
-    <div>
-        <label>
-            用户名 <input type="text" id="textUsername"/>
-        </label>
-        <label>
-            密码 <input type="password" id="textPassword"/>
-        </label>
-        <button id="btnLogin">登录</button>
+    <link
+      rel="stylesheet"
+      href="https://cdn.bootcss.com/bootstrap/4.0.0/css/bootstrap.min.css"
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="./common.css" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="row justify-content-md-center">
+        <div class="col-lg-5 col-md-12">
+					<h1 class="display-4">博客登录</h1>
+          <form class="blog-list">
+            <div class="form-group">
+              <label for="textUsername">用户名</label>
+              <input
+                type="text"
+                class="form-control"
+                id="textUsername"
+                placeholder="请输入用户名"
+              />
+            </div>
+            <div class="form-group">
+              <label for="textPassword">密码</label>
+              <input
+                type="password"
+                class="form-control"
+                id="textPassword"
+                placeholder="请输入密码"
+              />
+            </div>
+            <button type="button" class="btn btn-primary btn-lg btn-block" id="btnLogin">
+              登录
+            </button>
+          </form>
+        </div>
+      </div>
     </div>
-    
+
     <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.js"></script>
     <script>
-        // 发送 post 请求
-        function post(url, data = {}) {
-            return $.ajax({
-                type: 'post',
-                url,
-                data: JSON.stringify(data),
-                contentType: "application/json",
-            })
-        }
+      // 发送 post 请求
+      function post(url, data = {}) {
+        return $.ajax({
+          type: "post",
+          url,
+          data: JSON.stringify(data),
+          contentType: "application/json"
+        });
+      }
 
-        $('#btnLogin').click(() => {
-            const username = $('#textUsername').val()
-            const password = $('#textPassword').val()
-            const url = '/api/user/login'
-            const data = {
-                username,
-                password
-            }
-            post(url, data).then(res => {
-                if (res.errno === 0) {
-                    // 登录成功
-                    alert('success')
-                    location.href = './admin.html'
-                } else {
-                    // 登录失败
-                    alert(res.message)
-                }
-            })
-        })
+      $("#btnLogin").click(() => {
+        const username = $("#textUsername").val();
+        const password = $("#textPassword").val();
+        const url = "/api/user/login";
+        const data = {
+          username,
+          password
+        };
+        post(url, data).then(res => {
+          if (res.errno === 0) {
+            // 登录成功
+            alert("success");
+            location.href = "./admin.html";
+          } else {
+            // 登录失败
+            alert(res.message);
+          }
+        });
+      });
     </script>
-</body>
+  </body>
 </html>
