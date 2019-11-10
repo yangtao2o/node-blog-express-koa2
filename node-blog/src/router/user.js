@@ -11,6 +11,7 @@ const handleUserRouter = (req, res) => {
     return result.then(data => {
       if(data.username) {
         req.session.username = data.username
+        req.session.realname = data.realname
         // update redis
         set(req.sessionId, req.session)
         return new SuccessModel()
