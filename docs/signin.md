@@ -90,7 +90,7 @@ const getCookieExpires = () => {
 // 设置
 res.setHeader(
   "Set-Cookie",
-  `username=${data.username}; path='/'; httpOnly; expire=${getCookieExpires()}`
+  `username=${data.username}; path=/; httpOnly; expires=${getCookieExpires()}`
 );
 ```
 
@@ -120,11 +120,12 @@ const serverHandle = (req, res) => {
 
   // ...
 
-  // 在需要设置cookie的地方设置
+  // 在需要设置cookie的地方设置，
+  // 注意设置格式，我为了找这个格式错误，差点崩溃...
   if (needSetCookie) {
     res.setHeader(
       "Set-Cookie",
-      `userid=${userId}; path='/'; httpOnly; expire=${getCookieExpires()}`
+      `userid=${userId}; path=/; httpOnly; expires=${getCookieExpires()}`
     );
   }
 
@@ -225,7 +226,7 @@ const serverHandle = (req, res) => {
         if (needSetCookie) {
           res.setHeader(
             "Set-Cookie",
-            `userid=${userId}; path='/'; httpOnly; expire=${getCookieExpires()}`
+            `userid=${userId}; path=/; httpOnly; expires=${getCookieExpires()}`
           );
         }
         res.end(JSON.stringify(userData));
@@ -241,7 +242,7 @@ const serverHandle = (req, res) => {
         if (needSetCookie) {
           res.setHeader(
             "Set-Cookie",
-            `userid=${userId}; path='/'; httpOnly; expire=${getCookieExpires()}`
+            `userid=${userId}; path=/; httpOnly; expires=${getCookieExpires()}`
           );
         }
         res.end(JSON.stringify(blogData));

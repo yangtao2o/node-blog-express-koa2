@@ -150,3 +150,5 @@ location /api/ {
 ```
 
 然后访问：`http://localhost:8080`，确保redis、mysql 已开启
+
+接着，测试增删改查等功能，基本上没有问题，唯一的问题就是在 cookie 设置上花了一些时间去查找失效原因。

@@ -204,7 +204,6 @@ const serverHandle = (req, res) => {
   // post data
   getPostData(req).then(postData => {
     req.body = postData
-    console.log('reqbody:', postData)
     // 登录路由
     const userData = handleUserRouter(req, res)
     if(userData) {

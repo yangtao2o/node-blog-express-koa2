@@ -62,7 +62,6 @@ const serverHandle = (req, res) => {
 
     req.cookie[key] = val
   })
-
   // 解析 session(redis)
   let needSetCookie = false
   let userId = req.cookie.userid
@@ -76,7 +75,6 @@ const serverHandle = (req, res) => {
   // 获取 session 值
   req.sessionId = userId
   get(req.sessionId).then(sessionData => {
-    console.log({sessionData})
     if(sessionData == null) {
       // 初始化 redis 中的 session 值
       set(req.sessionId, {})
@@ -86,7 +84,6 @@ const serverHandle = (req, res) => {
       // 设置 session 值
       req.session = sessionData
     }
-    console.log('req-session is ', req.session)
 
     // post data
     return getPostData(req)
@@ -100,7 +97,7 @@ const serverHandle = (req, res) => {
       userResult.then(userData => {
         // 操作 cookie
         if(needSetCookie) {
-          res.setHeader('Set-Cookie', `userid=${userId}; path='/'; httpOnly; expire=${getCookieExpires()}`) 
+          res.setHeader('Set-Cookie', `userid=${userId}; path=/; httpOnly; expires=${getCookieExpires()}`) 
         }
         res.end(
           JSON.stringify(userData)
@@ -115,7 +112,7 @@ const serverHandle = (req, res) => {
       blogResult.then(blogData => {
         // 操作 cookie
         if(needSetCookie) {
-          res.setHeader('Set-Cookie', `userid=${userId}; path='/'; httpOnly; expire=${getCookieExpires()}`) 
+          res.setHeader('Set-Cookie', `userid=${userId}; path=/; httpOnly; expires=${getCookieExpires()}`) 
         }
         res.end(
           JSON.stringify(blogData)

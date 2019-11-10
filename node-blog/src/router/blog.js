@@ -19,7 +19,6 @@ const handleBlogRouter = (req, res) => {
     const keyword = req.query.keyword || ''
     // 管理员后台
     if(req.query.isadmin) {
-      console.log(req.session)
       const loginCheckResult = loginCheck(req)
       if(loginCheckResult) {
         return loginCheckResult
@@ -73,12 +72,12 @@ const handleBlogRouter = (req, res) => {
   }
 
   // 删除一篇博客
-  if(method === 'POST' && req.path === '/api/blog/delete') {
+  if(method === 'POST' && req.path === '/api/blog/del') {
     const loginCheckResult = loginCheck(req)
     if(loginCheckResult) {
       return loginCheckResult
     }
-    req.body.author = req.session.username
+    author = req.session.username
     const result = delBlog(id, author)
     return result.then(val => {
       if(val) {
