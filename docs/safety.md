@@ -53,6 +53,17 @@ const sql = `
 * 消毒 - 对危险字符进行转义
 * HttpOnly -防范XSS攻击者窃取Cookie数据
 
+比如node博客里：新建文章的时候，标题里输入`<script>alert('我是一段js代码')</script>`，然后点击提交，就会直接弹出来。
+
+node 使用 xss：
+
+```js
+const title = xss(blogData.title)
+
+// title
+// &lt;script&gt;alert('我是一段js代码')&lt;/script&gt;
+```
+
 ### CSRF攻击
 
 > CSRF攻击（Cross Site Request Forgery，跨站请求伪造）是攻击者通过跨站请求，以合法的用户身份进行非法操作（如转账或发帖等）。
