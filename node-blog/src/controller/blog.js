@@ -1,11 +1,14 @@
-const { exec } = require('./../db/mysql')
+const {
+  exec,
+  escape
+} = require('./../db/mysql')
 
 const getList = (author, keyword) => {
   let sql = `select * from blogs where 1=1 `
-  if(author) {
-    sql += `and author='${author}' `
+  if (author) {
+    sql += `and author=${escape(author)} `
   }
-  if(keyword) {
+  if (keyword) {
     sql += `and title like '%${keyword}%' `
   }
   sql += `order by createtime desc;`
@@ -18,7 +21,7 @@ const getDetail = (id) => {
   return exec(sql).then(rows => {
     return rows[0]
   })
-  
+
 }
 
 const newBlog = (blogData = {}) => {
@@ -30,7 +33,7 @@ const newBlog = (blogData = {}) => {
 
   const sql = `
     insert into blogs (title, content, author, createtime)
-    values ('${title}', '${content}', '${author}', ${createtime});
+    values (${escape(title)}, ${escape(content)}, '${author}', ${createtime});
   `
   return exec(sql).then(insertData => {
     return {
@@ -44,11 +47,11 @@ const updateBlog = (id, blogData = {}) => {
   const content = blogData.content
 
   const sql = `
-    update blogs set title='${title}', content='${content}' where id='${id}'
+    update blogs set title=${escape(title)}, content=${escape(content)} where id='${id}'
   `
 
   return exec(sql).then(updateData => {
-    if(updateData.affectedRows > 0) {
+    if (updateData.affectedRows > 0) {
       return true
     } else {
       return false
@@ -61,7 +64,7 @@ const delBlog = (id, author) => {
     delete from blogs where id='${id}' and author='${author}';
   `
   return exec(sql).then(delData => {
-    if(delData.affectedRows > 0) {
+    if (delData.affectedRows > 0) {
       return true
     } else {
       return false
@@ -69,7 +72,7 @@ const delBlog = (id, author) => {
   })
 }
 
-module.exports =  { 
+module.exports = {
   getList,
   getDetail,
   newBlog,
