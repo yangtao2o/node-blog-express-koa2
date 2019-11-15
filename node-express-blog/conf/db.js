@@ -17,6 +17,20 @@ if(env === 'dev') {
   }
 }
 
+if(env === 'test') {
+  MYSQL_CONF = {
+    host: 'localhost',
+    user: 'root',
+    password: '123456',
+    port: '3306',
+    database: 'myblog'
+  }
+  REDIS_CONF = {
+    host: '127.0.0.1',
+    port: '6379'
+  }
+}
+
 if(env === 'production') {
   MYSQL_CONF = {
     host: 'localhost',

@@ -3,8 +3,9 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "nodemon ./bin/www ",
-    "dev": "cross-env NODE_ENV=dev PORT=8000 nodemon ./bin/www"
+    "dev": "cross-env NODE_ENV=dev PORT=8000 nodemon ./bin/www",
+    "test": "cross-env NODE_ENV=test PORT=8000 nodemon ./bin/www",
+    "prd": "cross-env NODE_ENV=production PORT=8000 ./bin/www"
   },
   "devDependencies": {
     "cross-env": "^5.2.0",
