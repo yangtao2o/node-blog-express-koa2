@@ -10,30 +10,23 @@ const {
   SuccessModel,
   ErrorModel
 } = require('../model/resModel')
+const loginCheck = require('../middleware/loginCheck')
 
 const router = express.Router();
-const loginCheck = (req) => {
-  if (!req.session.username) {
-    return Promise.resolve(
-      new ErrorModel('未登录')
-    )
-  }
-}
 
 // 获取博客列表
 router.get('/list', (req, res, next) => {
   let author = req.query.author || ''
   const keyword = req.query.keyword || ''
-
+  const username = req.session.username
   // 管理员后台
-  // if (req.query.isadmin) {
-  //   const loginCheckResult = loginCheck(req)
-  //   if (loginCheckResult) {
-  //     return loginCheckResult
-  //   }
-  //   // 强制使用自己的用户名
-  //   author = req.session.username
-  // }
+  if (req.query.isadmin) {
+    if(username == null) {
+      return res.json(new ErrorModel('未登录'))
+    }
+    // 强制使用自己的用户名
+    author = username
+  }
 
   getList(author, keyword).then(data => {
     res.json(new SuccessModel(data))
@@ -49,11 +42,7 @@ router.get('/detail', (req, res, next) => {
 })
 
 // 新建一篇博客
-router.get('/new', (req, res, next) => {
-  const loginCheckResult = loginCheck(req)
-  if (loginCheckResult) {
-    return loginCheckResult
-  }
+router.post('/new', loginCheck, (req, res, next) => {
   req.body.author = req.session.username
   newBlog(req.body).then(data => {
     res.json(new SuccessModel(data))
@@ -61,11 +50,7 @@ router.get('/new', (req, res, next) => {
 })
 
 // 更新一篇博客
-router.get('/update', (req, res, next) => {
-  const loginCheckResult = loginCheck(req)
-  if (loginCheckResult) {
-    return loginCheckResult
-  }
+router.post('/update', loginCheck, (req, res, next) => {
   updateBlog(req.query.id, req.body).then(data => {
     if (data) {
       res.json(new SuccessModel(data))
@@ -76,12 +61,9 @@ router.get('/update', (req, res, next) => {
 })
 
 // 删除一篇博客
-router.get('/del', (req, res, next) => {
-  const loginCheckResult = loginCheck(req)
-  if (loginCheckResult) {
-    return loginCheckResult
-  }
-  author = req.session.username
+router.post('/del', loginCheck, (req, res, next) => {
+  const id = req.query.id
+  const author = req.session.username
   delBlog(id, author).then(data => {
     if (data) {
       res.json(new SuccessModel(data))
