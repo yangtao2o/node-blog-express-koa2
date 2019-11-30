@@ -27,7 +27,7 @@ router.post('/login', (req, res, next) => {
 })
 
 router.get('/login-test', (req, res, next) => {
-  if(req.session.username) {
+  if (req.session.username) {
     res.json({
       errno: 0,
       msg: '已登录'
@@ -42,11 +42,11 @@ router.get('/login-test', (req, res, next) => {
 
 router.get('/session-test', (req, res, next) => {
   const session = req.session
-  if(session.viewNum == null) {
+  if (session.viewNum == null) {
     session.viewNum = 0
   }
   session.viewNum++
-  if(session) {
+  if (session) {
     res.json({
       viewNum: session.viewNum
     })

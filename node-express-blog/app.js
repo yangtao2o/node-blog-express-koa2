@@ -36,6 +36,8 @@ app.use(session({
   }
 }));
 
+app.use(express.json());
+
 // create a write stream (in append mode)
 const accessLogStream = fs.createWriteStream(path.join(__dirname, './logs', 'access.log'), {
   flags: 'a'
@@ -50,7 +52,6 @@ if (ENV === 'dev' || ENV === 'test') {
   }));
 }
 
-app.use(express.json());
 app.use(express.urlencoded({
   extended: false
 }));

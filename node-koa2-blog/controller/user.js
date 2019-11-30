@@ -2,9 +2,7 @@ const {
   exec,
   escape
 } = require('../db/mysql')
-const {
-  genPassword
-} = require('../utils/crypto.js')
+const { genPassword } = require('../utils/crypto.js')
 
 const login = async (username, password) => {
   // password = genPassword(password)

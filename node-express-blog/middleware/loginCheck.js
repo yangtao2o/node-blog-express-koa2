@@ -4,9 +4,8 @@ const {
 
 module.exports = (req, res, next) => {
   if (!req.session.username) {
-    return res.json(
-      new ErrorModel('未登录')
-    )
+    res.json(new ErrorModel('未登录'))
+    return
   }
   next()
 }

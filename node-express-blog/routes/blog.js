@@ -21,7 +21,7 @@ router.get('/list', (req, res, next) => {
   const username = req.session.username
   // 管理员后台
   if (req.query.isadmin) {
-    if(username == null) {
+    if (username == null) {
       return res.json(new ErrorModel('未登录'))
     }
     // 强制使用自己的用户名
