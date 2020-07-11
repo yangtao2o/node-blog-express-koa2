@@ -1,6 +1,6 @@
 # Node-Blog
 
-学习使用 Node.js 从零开发 web server 博客项目，并使用 express、koa2 进行重构重构，使用 Nginx 做反向代理。
+基于 ES6 / Node.js 原生开发 Web server 博客，并使用 Express / Koa 等框架进行重构，使用 Nginx 做反向代理。主要有登录、安全、日志等方面内容。
 
 ## Start
 
