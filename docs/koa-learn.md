@@ -93,3 +93,39 @@ app.use(router.routes()).use(router.allowedMethods())
 
 app.listen(3000)
 ```
+
+### 页面渲染
+
+使用前端渲染，通常需要一个一面引擎，比如 ejs，需要分别安装 [ejs](https://www.npmjs.com/package/ejs) 以及 [koa-views](https://www.npmjs.com/package/koa-views) 模块：
+
+```js
+const Koa = require('koa')
+const views = require('koa-views')
+let ejs = require('ejs')
+const Router = require('@koa/router')
+
+const app = new Koa()
+const router = new Router()
+
+const render = views(__dirname + '/static', {
+  extension: 'ejs'
+})
+
+// Must be used before any router is used
+app.use(render)
+
+router.get('/list', async (ctx, next) => {
+  return ctx.render('list', {
+    title: '列表页'
+  })
+})
+
+// 路由
+app.use(router.routes()).use(router.allowedMethods())
+
+app.listen(3000)
+```
+
+## 功能完善
+
+## Koa 源码

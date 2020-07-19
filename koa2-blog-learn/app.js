@@ -2,9 +2,24 @@ const Koa = require('koa')
 const Router = require('@koa/router')
 const bodyParser = require('koa-bodyparser')
 const serve = require('koa-static')
+const views = require('koa-views')
+let ejs = require('ejs')
 
 const app = new Koa()
 const router = new Router()
+
+const render = views(__dirname + '/static', {
+  extension: 'ejs'
+})
+
+// Must be used before any router is used
+app.use(render)
+
+router.get('/list', async (ctx, next) => {
+  return ctx.render('list', {
+    title: '列表页'
+  })
+})
 
 router.get('/', async (ctx, next) => {
   ctx.body = `
